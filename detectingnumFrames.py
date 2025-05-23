@@ -1,16 +1,22 @@
 import cv2
+import os
 
-# Path to your video file
-video_path = '/home/sg1807/Desktop/sageena/cciPhase2/SLC/EB/videos/29 jan/changedFrame/10.0.0.219_20250129014135_20250129082416_10fps.mp4'
+# Path to the folder containing .ts video files
+folder_path = 'SLC/3500_S_EB/videos/fourCams'
 
-# Open the video file
-cap = cv2.VideoCapture(video_path)
+# List all files in the directory
+video_files = [f for f in os.listdir(folder_path) if f.endswith('.mp4')]
 
-# Check if the video was opened successfully
-cap = cv2.VideoCapture(video_path)
-fps = cap.get(cv2.CAP_PROP_POS_FRAMES)
-print(f"Video: {video_path}, FPS: {fps}")
-
-
-# Release the video capture object
-cap.release()
+# Loop through each .ts file and get its FPS
+for video_file in video_files:
+    video_path = os.path.join(folder_path, video_file)
+    cap = cv2.VideoCapture(video_path)
+    
+    if not cap.isOpened():
+        print(f"Error opening video file: {video_file}")
+        continue
+    
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    print(f"Video: {video_file}, FPS: {fps}")
+    
+    cap.release()

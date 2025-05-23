@@ -2,13 +2,15 @@ import cv2
 import numpy as np
 
 # Load the video
-video_path = "/home/sg1807/Desktop/sageena/cciPhase2/SLC/EB/videos/29 jan/four videos/c0.mp4"  # Update with your video file
+video_path = "/home/sg1807/Desktop/sageena/cciPhase2/SLC/3500_S_EB/videos/fourCams/c0.mp4"  # Update with your video file
 cap = cv2.VideoCapture(video_path)
 
 # Define bounding box coordinates
-top_box = (1320, 185, 1334, 199)  # Top light
-middle_box = (1320, 202, 1334, 216)  # Middle (Yellow) light
-bottom_box = (1320, 218, 1334, 232)  # Bottom light
+top_box = (995, 364, 1013, 382)    # Top light (18x18 box, 36 pixels above bottom)
+middle_box = (995, 382, 1013, 400)  # Middle (Yellow) light
+bottom_box = (995, 400, 1013, 418)  # Bottom light
+BRIGHTNESS_MARGIN = 2  # You can adjust this if needed
+
 
 yellow_frames = []
 frame_index = 0
@@ -34,7 +36,8 @@ while cap.isOpened():
     bottom_brightness = np.mean(bottom_light)
 
     # If the middle box is brighter than the others, it's likely yellow
-    if middle_brightness > top_brightness and middle_brightness > bottom_brightness:
+    if (middle_brightness > top_brightness + BRIGHTNESS_MARGIN and middle_brightness > bottom_brightness + BRIGHTNESS_MARGIN):
+
         if not yellow_detected:
             start_frame = frame_index  # Start of yellow light detection
             yellow_detected = True
@@ -42,7 +45,9 @@ while cap.isOpened():
         if yellow_detected:
             yellow_frames.append((start_frame, frame_index - 1))  # End of yellow light detection
             yellow_detected = False
+            # print(start_frame)
             start_frame = None
+            # print(start_frame)
 
     frame_index += 1
 
