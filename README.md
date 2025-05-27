@@ -2,54 +2,68 @@
 
 ## Overview
 
-This project automates the detection of yellow light transitions and synchronizes multi-camera traffic videos for enhanced analysis and visualization. It forms part of a broader research effort focused on improving traffic safety and intersection efficiency through computer vision techniques.
+This project automates the detection of yellow light transitions and synchronizes multi-camera traffic videos for enhanced analysis and visualization. It forms part of a broader research initiative aimed at improving traffic safety and intersection efficiency using computer vision.
 
 ## Problem Statement
 
-Traffic signal timing is critical to road safety and traffic flow efficiency. Analyzing the precise onset of the yellow signal and corresponding driver behavior is essential for evaluating and optimizing traffic control measures.
+Traffic signal timing is critical to road safety and traffic flow efficiency. Understanding the exact onset of the yellow light and analyzing driver responses during this interval is essential for evaluating and optimizing traffic control strategies.
 
 ## Data Description
 
-- **Real-Time Videos**: Each dataset includes footage from **four cameras** at an intersection.
-- **Signal Head Camera**: The closest camera, capturing the traffic signal directly, is provided in `.ts` format and records **4+ hours of video**.
-- **Other Cameras**: Typically cover different angles and are used for synchronized analysis of traffic behavior.
+- **Intersection Videos**: Each dataset includes footage from **four cameras** positioned at different angles around a traffic intersection.
+- **Signal Head Camera**: A `.ts` format video capturing the traffic signal directly, typically over **4+ hours** of footage.
+- **Other Cameras**: MP4 videos that cover alternative angles to observe vehicle behavior from multiple perspectives.
 
-## Methodology
+## Workflow and Methodology
 
-### 1. Yellow Light Detection
-Using the `.ts` video from the **signal head camera**, the system detects the **exact time frames where the yellow light is active**. This is achieved using OpenCV to monitor brightness changes within a predefined region of interest (ROI).
+### 1. Format Conversion (`tomp4.py`)
 
-### 2. Synchronization
-With the help of `syncing.py`, all four camera perspectives are **synchronized** based on timestamps. This ensures a coherent multi-angle view of each traffic event.
+Converts the `.ts` file from the **signal head camera** to `.mp4`, making it compatible with OpenCV and other processing tools.
 
-### 3. Clip Generation
-Once yellow light onset is detected:
-- A **20-second clip** is generated for each event:
-  - **8 seconds before** yellow light
-  - **4 seconds of yellow light**
-  - **8 seconds after**
+### 2. Yellow Light Detection (`3boundingboxes.py`)
 
-This provides a complete temporal context of vehicle behavior around the yellow transition.
+Detects **yellow light onset** using brightness changes within predefined **bounding boxes**.
+
+- Coordinates for these boxes can be determined using the first code snippet in `yellow_light_clip.ipynb`.
+- Outputs the **exact frame numbers** corresponding to yellow light transitions.
+
+### 3. Finding the Synced Frame (`fiftyFrames.py`)
+
+- Extracts **50 frames** from each of the four camera videos.
+- Helps visually identify the **perfectly synced frame number** across all videos.
+
+### 4. Video Synchronization and Clip Generation (`syncing.py`)
+
+Uses:
+- **Yellow frame numbers** from `3boundingboxes.py`
+- **Perfect sync frames** from `fiftyFrames.py`
+
+Generates synchronized **20-second clips** for each yellow light event:
+- **8 seconds before**
+- **4–5 seconds during** yellow light
+- **8 seconds after**
+
+> ⚠️ **Note**: Before uploading or using any generated clip, verify that:
+> - All four videos are **perfectly time-synced**
+> - The **yellow light is clearly visible** in each clip
 
 ## Purpose and Impact
 
-This tool enables traffic engineers and researchers to:
+This tool allows traffic engineers and researchers to:
 - **Automatically detect yellow signal activation**
-- **Synchronize footage from multiple traffic cameras**
-- **Generate meaningful video clips** for further analysis and visualization
+- **Synchronize multi-camera traffic footage**
+- **Generate meaningful, time-aligned video clips**
 
-These capabilities are aimed at enhancing:
-- **Intersection safety evaluation**
-- **Traffic signal timing assessment**
-- **Infrastructure planning and decision-making**
+These capabilities support:
+- **Intersection safety studies**
+- **Traffic signal optimization**
+- **Urban planning and infrastructure evaluation**
 
 ## Technologies Used
 
-- Python
-- OpenCV
-- FFmpeg
-- NumPy
-- Pandas
-
-## Repository Structure
+- Python  
+- OpenCV  
+- FFmpeg  
+- NumPy  
+- Pandas  
 
