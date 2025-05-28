@@ -18,6 +18,6 @@ def convert_ts_to_clean_mp4(input_path, output_path):
         print("Re-encoding failed:", e)
 
 # Usage:
-input_ts = '3500_S_EB/videos/3500 S EB Signal - Line 21/10.0.0.219_20250410133344_20250410155526.ts'
+input_ts = '3500_S_EB/videos/3500 S EB Signal - Line 21/10.0.0.219_20250410181448_20250410205831.ts'
 output_mp4 = '3500_S_EB/videos/fourCams/c0_reencoded.mp4'
 convert_ts_to_clean_mp4(input_ts, output_mp4)

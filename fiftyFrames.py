@@ -22,7 +22,7 @@ def extract_50_frames(video_path, output_folder, start_frame):
         os.makedirs(output_folder)
 
     count = 1
-    while count < 50:
+    while count < 500:
         ret, frame = cap.read()
         if not ret:
             print("Reached end of video or read error.")
@@ -35,8 +35,8 @@ def extract_50_frames(video_path, output_folder, start_frame):
     print(f"Extracted {count} frames to '{output_folder}'.")
 
 # === Change these paths if needed ===
-video_file = "3500_S_EB/videos/fourCams/c0.mp4"
-start_frame = 7
-output_dir = "3500_S_EB/videos/frames/testing"
+video_file = "rawData/fourCams/c3.mp4"
+start_frame = 268447
+output_dir = "frames/testing"
 
 extract_50_frames(video_file, output_dir, start_frame)

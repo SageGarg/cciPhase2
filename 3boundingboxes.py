@@ -2,13 +2,16 @@ import cv2
 import numpy as np
 
 # Load the video
-video_path = "/home/sg1807/Desktop/sageena/cciPhase2/SLC/3500_S_EB/videos/fourCams/c0.mp4"  # Update with your video file
+video_path = "/home/sg1807/Desktop/sageena/cciPhase2/current/raw data/fourCams/c0.mp4"  # Update with your video file
 cap = cv2.VideoCapture(video_path)
 
-# Define bounding box coordinates
-top_box = (995, 364, 1013, 382)    # Top light (18x18 box, 36 pixels above bottom)
-middle_box = (995, 382, 1013, 400)  # Middle (Yellow) light
-bottom_box = (995, 400, 1013, 418)  # Bottom light
+
+# Define bounding box coordinates (10x10 size)
+top_box = (1140, 304, 1150, 314)     # Top light
+middle_box = (1140, 314, 1150, 324)  # Middle (Yellow) light
+bottom_box = (1140, 324, 1150, 334)  # Bottom light (top-left at 1140, 324)
+
+
 BRIGHTNESS_MARGIN = 2  # You can adjust this if needed
 
 
@@ -56,6 +59,26 @@ if yellow_detected:
     yellow_frames.append((start_frame, frame_index - 1))
 
 cap.release()
+
+# Merge nearby yellow frame ranges
+merged_yellow_frames = []
+GAP_THRESHOLD = 20  # Adjust how many frames apart is considered "close enough" to merge
+
+for start, end in yellow_frames:
+    if not merged_yellow_frames:
+        merged_yellow_frames.append((start, end))
+    else:
+        prev_start, prev_end = merged_yellow_frames[-1]
+        if start <= prev_end + GAP_THRESHOLD:
+            # Extend the previous range
+            merged_yellow_frames[-1] = (prev_start, max(prev_end, end))
+        else:
+            # Start a new range
+            merged_yellow_frames.append((start, end))
+
+# Output merged frame ranges
+print("Merged yellow light frame ranges:", merged_yellow_frames)
+print(">>>-----------------------------------------------")
 
 # Output frame ranges where yellow light is detected
 print("Yellow light detected at frames:", yellow_frames)
