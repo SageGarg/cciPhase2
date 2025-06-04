@@ -35,7 +35,7 @@ def extract_50_frames(video_path, output_folder, start_frame):
     print(f"Extracted {count} frames to '{output_folder}'.")
 
 # === Change these paths if needed ===
-video_file = "rawData/fourCams/fixed_c0.mp4"
+video_file = "rawData/fourCams/c0.mp4"
 start_frame = 0
 output_dir = "frames/testing"
 

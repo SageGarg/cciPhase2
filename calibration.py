@@ -7,21 +7,21 @@ def time_to_seconds(t):
 
 # Real-world start times
 video_start_times = {
-    "c0.mp4": time_to_seconds("13:31:03"),
-    "c1.mp4": time_to_seconds("06:22:08"),
-    "c2.mp4": time_to_seconds("06:03:09"),
-    "c3.mp4": time_to_seconds("05:51:09")
+    "c0.mp4": time_to_seconds("18:12:47"),
+    "c1.mp4": time_to_seconds("00:00:03"),
+    "c2.mp4": time_to_seconds("00:00:01"),
+    "c3.mp4": time_to_seconds("00:00:02")
 }
 
 # Sync window in real-world time (adjust as needed)
-sync_start_time = time_to_seconds("15:35:00")  # 1:32 PM
-sync_end_time = time_to_seconds("16:02:20")    # 1:32:20 PM
+sync_start_time = time_to_seconds("19:36:00")  # 1:32 PM
+sync_end_time = time_to_seconds("20:06:45")    # 1:32:20 PM
 fps = 10
 frame_width = 640
 frame_height = 550
 
 # Video order for final display: c3 | c2 | c1 | c0
-video_order = ["/home/sg1807/Desktop/sageena/cciPhase2/SLC/EB/videos/28 jan/3CAM/c3.mp4", "/home/sg1807/Desktop/sageena/cciPhase2/SLC/EB/videos/28 jan/3CAM/c2.mp4", "/home/sg1807/Desktop/sageena/cciPhase2/SLC/EB/videos/28 jan/3CAM/c1.mp4", "/home/sg1807/Desktop/sageena/cciPhase2/SLC/EB/videos/28 jan/3CAM/c0.mp4"]
+video_order = ["/home/sg1807/Desktop/sageena/cciPhase2/current/rawData/fourCams/c3.mp4", "/home/sg1807/Desktop/sageena/cciPhase2/current/rawData/fourCams/c2.mp4", "/home/sg1807/Desktop/sageena/cciPhase2/current/rawData/fourCams/c1.mp4", "/home/sg1807/Desktop/sageena/cciPhase2/current/rawData/fourCams/c0.mp4"]
 
 # Open video captures and calculate frame offsets
 caps = []
@@ -39,6 +39,12 @@ for video in video_order:
     real_start = video_start_times[os.path.basename(video)]
 
     offset = (sync_start_time - real_start) * fps
+    offset = (sync_start_time - real_start) * fps
+
+    # Adjust c3.mp4 by shifting 5 frames later (because it's 0.5s early)
+    if os.path.basename(video) == "c3.mp4":
+        offset += 1  # Add 5 frames to delay it by 0.5 seconds
+
 
     # Skip to correct frame
     cap.set(cv2.CAP_PROP_POS_FRAMES, offset)

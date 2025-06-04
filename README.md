@@ -16,6 +16,8 @@ Traffic signal timing is critical to road safety and traffic flow efficiency. Un
 
 ## Workflow and Methodology
 
+### follow yellowLightPipeline.ipynb file or the below steps
+
 ### 1. Format Conversion (`tomp4.py`)
 
 Converts the `.ts` file from the **signal head camera** to `.mp4`, making it compatible with OpenCV and other processing tools.
